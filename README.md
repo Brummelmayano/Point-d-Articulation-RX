@@ -33,11 +33,11 @@ Point d'Articulation RX est une application Python dédiée à la détection et 
    ```bash
    git clone <URL_du_dépôt>
    cd point_articulation_rx
-
-
+   ```
 ### 📦 Installer les dépendances : Assurez-vous d’avoir Python 3.7+ installé, puis lancez :
    ```bash
   pip install -r requirements.txt
+   ```
 
 ## Utilisation
 
@@ -45,14 +45,17 @@ Point d'Articulation RX est une application Python dédiée à la détection et 
 
    ```bash
   python src/main.py data/example_graph.txt
+   ```
 
 
 ### 👁️ Visualisation Graphique
    ```bash
     python src/visualize.py data/example_graph.txt
+   ```
 
 
 ### 🧪 Lancer les Tests Unitaires
    ```bash
   pytest tests/
+   ```
 
