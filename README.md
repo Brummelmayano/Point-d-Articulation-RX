@@ -31,7 +31,7 @@ Point d'Articulation RX est une application Python dédiée à la détection et 
 
 ### 🔁 Cloner le dépôt :
    ```bash
-   git clone <URL_du_dépôt>
+   git clone https://github.com/Brummelmayano/Point-d-Articulation-RX.git
    cd point_articulation_rx
    ```
 ### 📦 Installer les dépendances : Assurez-vous d’avoir Python 3.7+ installé, puis lancez :
