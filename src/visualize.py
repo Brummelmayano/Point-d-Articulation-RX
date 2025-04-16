@@ -1,8 +1,10 @@
+import sys
 import matplotlib.pyplot as plt 
 import networkx as nx
 from graph import Graph
 from dfs import find_articulation_points
 from matplotlib.patches import Patch
+
 
 def read_graph_from_file(filepath):
     with open(filepath, 'r') as f:
@@ -24,20 +26,20 @@ def draw_graph(filepath):
     # Détection des points d'articulation avec notre propre fonction
     articulation_points = find_articulation_points(custom_graph)
 
-    # Création du graphe NetworkX
+    # Création d'un graphe NetworkX pour la visualisation
     G_nx = nx.Graph()
     G_nx.add_nodes_from(range(n))
     G_nx.add_edges_from(edges)
 
-    # Positionnement automatique
+    # Positionnement automatique des nœuds
     pos = nx.spring_layout(G_nx, seed=42)
 
-    # Couleurs des nœuds selon qu’ils soient points d’articulation ou non
+    # Définition des couleurs : rouge pour les points d'articulation, bleu clair pour le reste
     node_colors = ['red' if node in articulation_points else 'lightblue' for node in G_nx.nodes()]
 
     # Dessin du graphe
     nx.draw(G_nx, pos, with_labels=True, node_color=node_colors, edge_color='gray', node_size=700, font_size=10)
-
+    
     # Ajout de la légende
     legend_elements = [
         Patch(facecolor='red', edgecolor='black', label='Point d\'articulation'),
@@ -50,4 +52,8 @@ def draw_graph(filepath):
     plt.show()
 
 if __name__ == "__main__":
-    draw_graph("data/example_graph.txt")
+    if len(sys.argv) != 2:
+        print("Usage: python src/visualize.py <graph_file>")
+        sys.exit(1)
+    graph_file = sys.argv[1]
+    draw_graph(graph_file)
