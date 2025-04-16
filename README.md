@@ -74,7 +74,7 @@ Par exemple, voici un fichier simple décrivant un graphe de 5 nœuds et 4 arêt
     2 4
    ```
 
-Vous pouvez enregistrer ce fichier n’importe où sur votre système, par exemple sous le nom \texttt{mon\_graphe.txt}. 
+Vous pouvez enregistrer ce fichier n’importe où sur votre système, par exemple sous le nom mon_graphe.txt 
 Pour lancer l'algorithme sur ce nouveau graphe, utilisez la commande suivante: :
 
 ```bash
