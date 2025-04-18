@@ -122,4 +122,7 @@ def advanced_incremental_update_edge_addition(graph, x, y, disc, low, parent):
         low[node] = new_low[node]
         parent[node] = new_parent[node] if node in new_parent else parent.get(node, None)
     
-    return find_articulation_points(graph)
+    #return find_articulation_points(graph)
+    
+    new_ap = find_articulation_points(graph)
+    return new_ap, updated_nodes_sorted

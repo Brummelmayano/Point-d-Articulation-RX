@@ -1,12 +1,13 @@
-
 # src/main.py
 
 import sys
 import os
+import time
 from graph import Graph
 from dfs import find_articulation_points
 from updater import advanced_incremental_update_edge_addition
 from state_manager import load_graph_state, save_graph_state, compare_graph_states, get_current_graph_state
+from visualize import draw_graph
 
 def compute_dfs_state(graph):
     """
@@ -105,11 +106,17 @@ def main():
     
     print("Graphe chargé :")
     print(graph)
+
+    # Affichage du nombre de sommets et d'arêtes
+    print(f"Nombre de sommets : {len(graph.vertices())}")
+    print(f"Nombre d’arêtes   : {sum(len(graph.neighbors(v)) for v in graph.vertices()) // 2}")
     
     # Génération dynamique du nom du fichier d'état (ex: data/example_graph.txt -> data/example_graph.json)
     base, ext = os.path.splitext(file_path)
     state_file = base + ".json"
-    
+
+    start_time = time.time()  # Début du chronométrage
+
     saved_state = load_graph_state(state_file)
     current_state = get_current_graph_state(graph)
     
@@ -118,7 +125,6 @@ def main():
         disc, low, parent = compute_dfs_state(graph)
         save_graph_state(graph, disc, low, parent, state_file)
     else:
-        # Convertir les arêtes sauvegardées en tuples pour une comparaison correcte
         saved_edges = set(tuple(edge) for edge in saved_state["graph"]["edges"])
         current_edges = set(tuple(edge) for edge in current_state["graph"]["edges"])
         
@@ -131,24 +137,22 @@ def main():
             if removed_edges:
                 print("Arêtes supprimées :", removed_edges)
             
-            # Pour démonstration, on traite une modification d'ajout d'une arête si présente.
             if added_edges:
                 mod_edge = next(iter(added_edges))
                 print(f"\nActualisation incrémentale pour l'ajout de l'arête {mod_edge}...")
-                # Charger l'état DFS sauvegardé pour obtenir l'état initial (original_parent)
                 dfs_saved = saved_state["dfs_state"]
                 disc = {int(k): v for k, v in dfs_saved["disc"].items()}
                 low = {int(k): v for k, v in dfs_saved["low"].items()}
                 parent = {int(k): (None if dfs_saved["parent"][k] is None else int(dfs_saved["parent"][k]))
                           for k in dfs_saved["parent"]}
-                # Appel de l'actualisation incrémentale, en passant parent comme original_parent
-                updated_ap = advanced_incremental_update_edge_addition(graph, mod_edge[0], mod_edge[1], disc, low, parent)
+                updated_ap, updated_nodes_sorted = advanced_incremental_update_edge_addition(graph, mod_edge[0], mod_edge[1], disc, low, parent)
+                # Mise à jour visuelle avec coloration
+                draw_graph(file_path, articulation_points=updated_ap, highlighted_nodes=updated_nodes_sorted)
                 print("\nPoints d'articulation après actualisation incrémentale :")
                 print(sorted(updated_ap))
             else:
                 print("\nModification(s) détectée(s) (suppression ou modifications diverses), recalcul complet du DFS...")
                 disc, low, parent = compute_dfs_state(graph)
-            # Sauvegarder le nouvel état DFS mis à jour
             save_graph_state(graph, disc, low, parent, state_file)
         else:
             print("\nAucune modification détectée par rapport à l'état sauvegardé.")
@@ -157,11 +161,13 @@ def main():
             low = {int(k): v for k, v in dfs_saved["low"].items()}
             parent = {int(k): (None if dfs_saved["parent"][k] is None else int(dfs_saved["parent"][k]))
                       for k in dfs_saved["parent"]}
-    
-    # Calcul final des points d'articulation sur l'état DFS mis à jour
+
     ap = find_articulation_points(graph)
     print("\nPoints d'articulation détectés :")
     print(sorted(ap))
+
+    end_time = time.time()
+    print(f"\nTemps moyen d'exécution : {end_time - start_time:.4f} secondes")
 
 if __name__ == '__main__':
     main()
