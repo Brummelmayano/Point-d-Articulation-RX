@@ -58,4 +58,25 @@ Point d'Articulation RX est une application Python dédiée à la détection et 
    ```bash
   pytest tests/
    ```
+## Création d’un Nouveau Graphe
 
+Pour tester notre algorithme avec un nouveau graphe, il vous suffit de créer un fichier texte (.txt) contenant le graphe au format suivant :
+
+- La première ligne doit comporter deux entiers séparés par un espace : le nombre total de nœuds et le nombre total d’arêtes.
+- Chaque ligne suivante doit représenter une arête, indiquée par deux entiers (séparés par un espace) correspondant aux identifiants des nœuds reliés.
+
+Par exemple, voici un fichier simple décrivant un graphe de 5 nœuds et 4 arêtes :
+   ```bash
+    5 4
+    0 1
+    0 2
+    1 3
+    2 4
+   ```
+
+Vous pouvez enregistrer ce fichier n’importe où sur votre système, par exemple sous le nom mon_graphe.txt 
+Pour lancer l'algorithme sur ce nouveau graphe, utilisez la commande suivante: :
+
+```bash
+python src/main.py <chemin_complet_vers_le_fichier>/mon_graphe.txt
+```
